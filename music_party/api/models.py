@@ -7,7 +7,7 @@ def generate_roomCode():
   length = 10
   while True:
     roomCode = ''.join(random.choices(string.ascii_uppercase, k=length))
-    if room.objects.filter(roomCode=roomCode).count() == 0: 
+    if Room.objects.filter(roomCode=roomCode).count() == 0: 
       break
   
   return roomCode
