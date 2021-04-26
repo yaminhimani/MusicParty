@@ -6,6 +6,10 @@ class RoomSerializer(serializers.ModelSerializer):
   class Meta:
     model = Room
     fields = ('id', 'roomCode','host','guest_pause','votes_skip','created_at')
-    
 
+#check to see if data in post req is valid, and corresponds to what we want to do to create new room
+class CreateRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Room
+        fields = ('guest_pause', 'votes_skip')
  

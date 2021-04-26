@@ -17,7 +17,7 @@ def generate_roomCode():
 # Create your models here.
 #All the things that makes up a chatroom goes below
 class Room(models.Model):
-  roomCode = models.CharField(max_length=10, default="",unique=True)
+  roomCode = models.CharField(max_length=10, default=generate_roomCode,unique=True)
   host = models.CharField(max_length=50,unique=True)
   guest_pause = models.BooleanField(null=False, default=False)
   votes_skip = models.IntegerField(null=False, default=1)
