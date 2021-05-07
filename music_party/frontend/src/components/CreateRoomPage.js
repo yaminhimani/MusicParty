@@ -18,7 +18,50 @@ export default class CreateRoom extends Component{
 
   constructor(props){
     super(props);
+    this.state = {
+      guest_pause: true,
+      votes_skip: this.defaultVotes,
+    
+    };
+    this.handleRoomButton = this.handleRoomButton.bind(this);
+    this.handleVotesChange= this.handleVotesChange.bind(this);
+    this.handleGuestCanPause= this.handleGuestCanPause.bind(this);
+
+    //to use the this keyword in the methods we must bind them to the class which is done above
   }
+
+  //whatever we put in the text field will be updates to votes skip
+  handleVotesChange(e){
+    this.setState({
+      votes_skip: e.target.value,
+    })
+  }
+
+  //handle the guest pause feature
+  handleGuestCanPause(e){
+    this.setState({
+      guest_pause: e.target.value=='true' ? true : false
+    })
+  }
+
+  //creating a new room function
+  handleRoomButton(){
+    
+      const request = {
+        method: 'Post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+         votes_skip: this.state.votes_skip,
+         guest_pause: this.state.guest_pause,
+        }),
+
+      };
+      fetch('api/create-room', request).then((response) => response.json()).then((data) => console.log(data));
+      
+    
+  }
+
+
 
 
   render(){
@@ -34,7 +77,10 @@ export default class CreateRoom extends Component{
           <FormHelperText>
             <div align='center'>Guest Control of Playback State</div>
           </FormHelperText>
-          <RadioGroup row defaultValue='true'>
+          <RadioGroup row 
+          defaultValue='true'
+          onChange={this.handleGuestCanPause}
+          >
             <FormControlLabel 
             value = "true" 
             control={<Radio color="primary"/>}
@@ -56,7 +102,9 @@ export default class CreateRoom extends Component{
         </FormControl>
         <Grid item xs={12} align="center">
           <FormControl>
-            <TextField required={true} type="number"
+            <TextField 
+            required={true} type="number"
+            onChange={this.handleVotesChange}
             defaultValue={this.defaultVotes}
             inputProps={{
               min:1,
@@ -80,7 +128,10 @@ export default class CreateRoom extends Component{
         </Grid>
 
         <Grid item xs={12} align="center">
-          <Button color="primary" variant="contained">Create A Room</Button>
+          <Button color="primary" 
+          variant="contained"
+          onClick={this.handleRoomButton}
+          >Create A Room  </Button>
 
         </Grid>
         
