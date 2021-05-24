@@ -56,7 +56,7 @@ export default class CreateRoom extends Component{
         }),
 
       };
-      fetch('api/create-room', request).then((response) => response.json()).then((data) => console.log(data));
+      fetch('api/create-room', request).then((response) => response.json()).then((data) => this.props.history.push('/room/'+ data.roomCode));
       
     
   }
