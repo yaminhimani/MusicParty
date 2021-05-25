@@ -26,6 +26,7 @@ export default class CreateRoom extends Component{
     this.handleRoomButton = this.handleRoomButton.bind(this);
     this.handleVotesChange= this.handleVotesChange.bind(this);
     this.handleGuestCanPause= this.handleGuestCanPause.bind(this);
+    
 
     //to use the this keyword in the methods we must bind them to the class which is done above
   }
@@ -146,4 +147,6 @@ export default class CreateRoom extends Component{
     </Grid>
     );
   }
+
+
 }
