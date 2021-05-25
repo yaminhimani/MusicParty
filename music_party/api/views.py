@@ -33,6 +33,28 @@ class GetRoom(APIView):
         #no code in url 
         return Response({'Bad Request' : 'Code paramater not found in request'}, status=status.HTTP_400_BAD_REQUEST)
 
+class JoinRoom(APIView):
+
+    url_look = 'roomCode'
+    def post(self,request,format=None):
+         if not self.request.session.exists(self.request.session.session_key):
+            self.request.session.create()
+         roomCode= request.data.get(self.url_look)
+         if roomCode!= None:
+             room_result = Room.objects.filter(roomCode=roomCode)
+             if len(room_result)>0:
+                 room = room_result[0]
+                 self.request.session['room_code'] = roomCode #tells us user is in room in current session (so they can come back and know what room they are in)
+                 return Response({'message': 'Room Joined'}, status=status.HTTP_200_OK)
+                            
+             return Response({'Bad Request': 'Invalid Room Code'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+         return Response({"Bad Request": 'Invalid post data, did not find a code key'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+        
 
 
 class CreateRoomView(APIView):
@@ -55,9 +77,13 @@ class CreateRoomView(APIView):
                 room.guest_pause = guest_pause
                 room.votes_skip = votes_skip
                 room.save(update_fields=['guest_pause', 'votes_skip'])
+                self.request.session['room_code'] = room.roomCode #tells us user is in room in current session (so they can come back and know what room they are in)
+                return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+
             else:
                 room = Room(host=host, guest_pause=guest_pause, votes_skip=votes_skip)
                 room.save()
+                self.request.session['room_code'] = room.roomCode
             
             return Response(RoomSerializer(room).data, status=status.HTTP_201_CREATED)
 
